@@ -1,3 +1,5 @@
+
+
 # DAE-TSE: Detect, Attend and Extract — Keyword Guided Target Speaker Extraction
 
 <p align="center">
@@ -49,7 +51,7 @@ This repository currently releases **inference** code. Training code will be rel
 Requirements: **Python 3.10+**, **CUDA-capable GPU**, and **ffmpeg**.
 
 ```bash
-git clone https://github.com/DAE-TSE/DAE-TSE
+git clone https://github.com/GnafiY/DAE-TSE
 cd DAE-TSE
 
 conda create -n dae-tse python=3.10 -y
