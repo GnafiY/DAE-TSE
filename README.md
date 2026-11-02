@@ -23,6 +23,7 @@
 
 Dates below are in **China Standard Time (UTC+8)**.
 
+- **[2026-11-02]** 🚀 Model training code has been integrated into [WeSep](https://github.com/wenet-e2e/wesep); KCE-related code is being organized and will be released soon.
 - **[2026-08-13]** 🎮 Interactive Gradio demo released (LibriMix uid lookup + OOD upload).
 - **[2026-08-06]** 📦 Official inference code and pretrained weights released.
 
