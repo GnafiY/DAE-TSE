@@ -16,7 +16,7 @@ import soundfile
 import torch
 import torchaudio
 
-# Recipe root: examples/librimix/dae-tse
+# Recipe root: recipes/librimix/dae-tse
 _DEMO_DIR = os.path.dirname(os.path.abspath(__file__))
 _RECIPE_DIR = os.path.realpath(os.path.join(_DEMO_DIR, ".."))
 _REPO_ROOT = os.path.realpath(os.path.join(_RECIPE_DIR, "../../.."))

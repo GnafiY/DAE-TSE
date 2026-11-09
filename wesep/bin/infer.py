@@ -24,8 +24,6 @@ from wesep.utils.utils import (
 )
 from wesep.utils.executor import process_additional
 
-os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
-os.environ["TORCH_USE_CUDA_DSA"] = "1"
 
 def str2bool(v):
     if isinstance(v, bool):

@@ -1,0 +1,115 @@
+# Original paper KCE: whole-utterance train-860, CTC + speaker CE + pooling regularizer.
+model_arch: AEDKWSASRPhone
+model_config:
+  audio_net_config:
+    input_trans:
+      act: ReLU
+      dim:
+      - 256
+      - 256
+      norm: LayerNorm
+      num_block: 1
+    transformer_config:
+      conv_config:
+        channels: 256
+      corss_att_config:
+        n_feats: 256
+        n_head: 1
+        norm: LayerNorm
+      cross_att: MultiHeadCrossAtt
+      feed_forward_config: &id001
+        act: ReLU
+        dim:
+        - 256
+        - 2048
+        - 256
+        norm: LayerNorm
+        num_block: 1
+      self_att: MultiHeadAtt
+      self_att_config: &id002
+        n_feats: 256
+        n_head: 4
+      size: 256
+  kw_net_config:
+    input_trans:
+      act: ReLU
+      dim: 256
+      norm: LayerNorm
+      num_block: 1
+    num_phn_token: 74
+    transformer_config:
+      feed_forward_config: *id001
+      self_att: MultiHeadAtt
+      self_att_config: *id002
+      size: 256
+  loss_weight:
+    phn_ctc: 1.0
+    sv_ce: 0.5
+  num_audio_block: 9
+  num_kw_block: 4
+  sv_net_config:
+    front_output_size: 256
+    num_classes: 2338
+    pooling_conf:
+      use_softmax: false
+      layer_indices:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      type: learnable_weights
+    use_reg_loss: true
+    reg_loss_weight: 0.01
+exp_config:
+  exp_dir: exp/kce
+  exp_name: epoch
+  log_config:
+    filemode: a
+    format: '%(asctime)s: %(message)s'
+    level: INFO
+  log_interval: 5
+  optim_config:
+    lr: 0.001
+  trained_ckpt: ''
+  valid_interval: 100
+  warm_up_peak_epoch: 10
+data_config:
+  batch_size: 64
+  data_list: data/dump/datalist/train-860.jsonl
+  epoch: 150
+  fetch_key: mixspeech,mixspeech_len,phn_label,phn_label_len,keyword,keyword_len,target,spk_label
+  keyword_config:
+    config:
+      positive_prob: 1
+      special_token:
+        peok: 72
+        psok: 71
+        punk: 73
+        with_trans: true
+    format: sample
+  length_key: mixspeech,speech,keyword
+  num_worker: 9
+  shuffle: true
+  sph_config:
+    data_type: raw
+    feats_config:
+      frame_length: 25
+      frame_shift: 10
+      num_mel_bins: 80
+      dither: 0.0
+    feats_type: fbank
+    self_corruption:
+      num_corrupt: 1
+      sampler: uniform
+      sampler_config:
+        high: 0.9
+        low: 0.1
+  start_epoch: 0
+  sv_config:
+    spk2cls: data/dump/speaker_label/spk2cls.json
+  valid_list: data/dump/datalist/valid.jsonl

@@ -1,3 +1,0 @@
-# Optional deps for the local Gradio demo only.
-gradio>=4.0.0
-matplotlib>=3.5.0

@@ -9,7 +9,7 @@ mix_data_path=/path/to/Libri2Mix/wav16k/min
 data=data
 noise_type=clean
 
-. scripts/kaldi/parse_options.sh || exit 1
+. "$(dirname -- "${BASH_SOURCE[0]}")/parse_options.sh" || exit 1
 
 data=$(realpath ${data})
 
