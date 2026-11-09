@@ -12,6 +12,7 @@ import kce.model.NetModules as NM
 
 
 def get_asr_encoder(conf: dict):
+    conf = dict(conf)
     model_name = conf.pop('model_name')
     model_dict = {
         'TCASREncoder': TCASREncoder,
@@ -77,7 +78,7 @@ class TCASREncoder(nn.Module):
         state_dict = torch.load(
             checkpoint_path,
             weights_only=True,
-            map_location='cuda' if torch.cuda.is_available() else 'cpu',
+            map_location='cpu',
         )['model']
         model.load_state_dict(state_dict)
 

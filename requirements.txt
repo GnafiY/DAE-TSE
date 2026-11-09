@@ -10,3 +10,10 @@ soundfile
 fire
 tqdm
 g2p_en
+scipy
+scikit-learn
+matplotlib>=3.5.0
+auraloss
+torchmetrics
+tableprint
+gradio>=4.0.0

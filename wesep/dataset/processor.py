@@ -142,3 +142,27 @@ def sample_kw_from_label(label, kw_candidate=None, kw_sampler="random", a=2, b=6
         kw = [label[_] for _ in kw_candidate]
         kw_pos = kw_candidate[0]
     return kw, kw_pos
+
+
+def shuffle(data, shuffle_size=2500):
+    """Local shuffle the data
+
+    Args:
+        data: Iterable[{key, wavs, spks}]
+        shuffle_size: buffer size for shuffle
+
+    Returns:
+        Iterable[{key, wavs, spks}]
+    """
+    buf = []
+    for sample in data:
+        buf.append(sample)
+        if len(buf) >= shuffle_size:
+            random.shuffle(buf)
+            for x in buf:
+                yield x
+            buf = []
+    # The sample left over
+    random.shuffle(buf)
+    for x in buf:
+        yield x

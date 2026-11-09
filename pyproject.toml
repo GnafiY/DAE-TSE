@@ -5,8 +5,8 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "wesep"
 version = "0.1.0"
-description = "DAE-TSE inference runtime (keyword-guided target speaker extraction)"
-requires-python = ">=3.8"
+description = "DAE-TSE paper inference and whole-utterance training"
+requires-python = ">=3.10"
 dependencies = [
     "torch",
     "torchaudio",

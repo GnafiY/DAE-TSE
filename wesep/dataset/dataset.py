@@ -1,6 +1,6 @@
 # Copyright (c) 2021 Mobvoi Inc. (authors: Binbin Zhang)
 #               2023 Shuai Wang (wsstriving@gmail.com)
-# Slimmed for DAE-TSE inference.
+# DAE-TSE raw whole-utterance training and inference.
 
 import random
 
@@ -96,10 +96,13 @@ class DataList(IterableDataset):
     def __iter__(self):
         sampler_info = self.sampler.update()
         indexes = self.sampler.sample(self.lists)
-        for index in indexes:
-            data = dict(src=self.lists[index])
-            data.update(sampler_info)
-            yield data
+        while indexes:
+            for index in indexes:
+                data = dict(src=self.lists[index])
+                data.update(sampler_info)
+                yield data
+            if not self.repeat_dataset:
+                break
 
 
 def tse_collate_fn(batch, mode="max"):
@@ -125,6 +128,7 @@ def tse_collate_fn(batch, mode="max"):
     new_batch["spk"] = spk
     new_batch["key"] = key
     new_batch["additional"] = tse_collate_additional_fn(batch)
+    new_batch["spk_label"] = torch.zeros(len(wav_mix), dtype=torch.long)
     return new_batch
 
 
@@ -167,14 +171,20 @@ def Dataset(
     additional_conf=None,
     **_unused,
 ):
-    """Build the DAE-TSE inference dataset (raw wav.scp + keyword JSONL)."""
-    assert data_type == "raw", "DAE-TSE inference only supports raw wav.scp"
-    assert state == "test"
+    """Build the DAE-TSE whole-utterance dataset (raw wav.scp + keyword JSONL)."""
+    assert data_type == "raw", "This recipe supports raw wav.scp"
+    assert state in ("train", "val", "test")
+    assert whole_utt, "This recipe supports whole-utterance training only"
     additional_conf = additional_conf or {}
 
     lists = read_lists(data_list_file)
-    dataset = DataList(lists, shuffle=False, repeat_dataset=False)
+    dataset = DataList(lists, shuffle=state == "train",
+                       repeat_dataset=repeat_dataset)
     dataset = Processor(dataset, processor.parse_raw)
+
+    if state == "train" and configs.get("shuffle", False):
+        dataset = Processor(dataset, processor.shuffle,
+                            **configs.get("shuffle_args", {}))
 
     resample_rate = configs.get("resample_rate", 16000)
     dataset = Processor(dataset, processor.resample, resample_rate)

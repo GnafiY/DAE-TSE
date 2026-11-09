@@ -1,0 +1,114 @@
+# Published whole-utterance DAE-BSRNN configuration; KCE is frozen.
+clip_grad: 5.0
+config: confs/dae-bsrnn.yaml
+data_type: raw
+dataloader_args:
+  batch_size: 1
+  drop_last: true
+  num_workers: 1
+  pin_memory: true
+  prefetch_factor: 2
+dataset_args:
+  SSA_enroll_prob: 0
+  additional:
+    train:
+      data_type: TC-ASR
+      data_list: data/text_cue/dump/ready/train-100.jsonl
+      kw_sampler: random
+      kw_len_range:
+      - 2
+      - 6
+    val:
+      data_type: TC-ASR
+      data_list: data/text_cue/dump/ready/dev.jsonl
+      kw_sampler: random
+      kw_len_range:
+      - 2
+      - 6
+  fbank_args:
+    dither: 1.0
+    frame_length: 25
+    frame_shift: 10
+    num_mel_bins: 80
+  noise_enroll_prob: 0
+  noise_prob: 0
+  resample_rate: 16000
+  reverb_enroll_prob: 0
+  sample_num_per_epoch: 0
+  shuffle: false
+  shuffle_args:
+    shuffle_size: 2500
+  speaker_feat: false
+  specaug_enroll_prob: 0
+enable_amp: false
+exp_dir: exp/dae-bsrnn
+gpus:
+- 0
+- 1
+- 2
+- 3
+- 4
+- 5
+- 6
+- 7
+log_batch_interval: 1 #00
+loss: SISDR
+loss_args: {}
+model:
+  tse_model: DAE-BSRNN
+model_args:
+  tse_model:
+    cue_emb_dim: 128
+    asr_encoder:
+      model_name: TCASREncoder
+      checkpoint_path: exp/kce/epoch_149.pt
+      fnn:
+        input_dim: 256
+        num_layer: 3
+        output_dim: 128
+      multi_task: false
+      spksInTrain: 251
+    cue_fuse:
+      fuse_type: FiLM
+      multi_fuse: false
+    feature_dim: 128
+    multi_task: false
+    num_repeat: 6
+    spk_optim_head: asr
+    sr: 16000
+    stride: 128
+    win: 512
+model_init:
+  discriminator: null
+  spk_model: null
+  tse_model: null
+num_avg: 10
+num_epochs: 150
+optimizer:
+  tse_model: Adam
+optimizer_args:
+  tse_model:
+    lr: 0.001
+    weight_decay: 0.0001
+save_epoch_interval: 1
+scheduler:
+  tse_model: ExponentialDecrease
+scheduler_args:
+  scale_ratio: 1.0
+  tse_model:
+    epoch_iter: 1737
+    final_lr: 2.5e-05
+    initial_lr: 0.001
+    num_epochs: 150
+    warm_from_zero: false
+    warm_up_epoch: 0
+seed: 42
+train_data: data/clean/train-100/wav.scp
+train_spk2utt: data/clean/train-100/spk2enroll.json
+train_utt2spk: data/clean/train-100/single.utt2spk
+val_data: data/clean/dev/wav.scp
+val_spk1_enroll: data/clean/dev/spk1.enroll
+val_spk2_enroll: data/clean/dev/spk2.enroll
+val_spk2utt: data/clean/dev/single.wav.scp
+whole_utt: true
+repeat_dataset: true

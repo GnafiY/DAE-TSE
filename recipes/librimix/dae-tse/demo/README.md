@@ -11,8 +11,8 @@ https://huggingface.co/spaces/wenet-e2e/wesep-tse-2speaker-demo
 From the repo root (after the main inference env is installed and `exp/` is linked):
 
 ```bash
-pip install -r requirements-demo.txt
-cd examples/librimix/dae-tse
+pip install -r requirements.txt
+cd recipes/librimix/dae-tse
 # needs data/clean/test/wav.scp (same as infer.sh stage 1)
 bash demo/run_demo.sh
 ```

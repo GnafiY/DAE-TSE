@@ -29,15 +29,22 @@ venv
 
 # Experiment artifacts and audio data (download / prepare separately)
 exp
-examples/**/exp
-examples/**/data/clean
+recipes/**/exp
+recipes/**/data/clean
 raw_wav
 tensorboard
 wespeaker_models
 *.log
 
 # Local Gradio demo runtime
-examples/**/demo/audios/
-examples/**/demo/extracted/
-examples/**/demo/.gradio/
+recipes/**/demo/audios/
+recipes/**/demo/extracted/
+recipes/**/demo/.gradio/
 .gradio/
+
+# Prepared training metadata and downloaded resources.
+recipes/librispeech/kce/data/
+recipes/librimix/dae-tse/data/text_cue/dump/
+recipes/librimix/dae-tse/data/text_cue/transcript_nemo.jsonl
+*.pt
+tmp/
